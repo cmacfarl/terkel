@@ -163,6 +163,8 @@ public class MechanumGearedDrivetrain extends DrivetrainBaseImpl implements Driv
     {
         double adjSpeed;
 
+        RobotLog.i("****************************************************STRAFE, speed=%f", speed);
+        logEncoderCounts();
         adjSpeed = setAdjustedPower(motorMap.get(MotorPackage.MotorLocation.FRONT_RIGHT), -speed);
         RobotLog.i("%s, %f", MotorPackage.MotorLocation.FRONT_RIGHT.toString(), adjSpeed);
 
@@ -174,6 +176,7 @@ public class MechanumGearedDrivetrain extends DrivetrainBaseImpl implements Driv
 
         adjSpeed = setAdjustedPower(motorMap.get(MotorPackage.MotorLocation.BACK_LEFT), -speed);
         RobotLog.i("%s, %f", MotorPackage.MotorLocation.BACK_LEFT.toString(), adjSpeed);
+        logEncoderCounts();
     }
 
     @Override
