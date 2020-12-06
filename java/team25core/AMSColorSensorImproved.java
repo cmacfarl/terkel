@@ -353,13 +353,13 @@ public class AMSColorSensorImproved extends I2cDeviceSynchDevice<I2cDeviceSynchS
     @Override
     public synchronized I2cAddr getI2cAddress()
     {
-        return this.deviceClient.getI2cAddr();
+        return this.deviceClient.getI2cAddress();
     }
 
     @Override
     public synchronized void setI2cAddress(I2cAddr i2cAddr)
     {
-        this.deviceClient.setI2cAddr(i2cAddr);
+        this.deviceClient.setI2cAddress(i2cAddr);
     }
 
     //----------------------------------------------------------------------------------------------
