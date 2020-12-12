@@ -10,7 +10,8 @@ public class MotorValues {
     public double rl;
     public double rr;
 
-    MotorValues(double frontLeft, double frontRight, double rearLeft, double rearRight)
+    public MotorValues(double frontLeft, double frontRight, double rearLeft, double rearRight)
+    //may be returned to protected state when/if SingleGamepadControlScheme class is moved to team25core
     {
         this.fl = frontLeft;
         this.fr = frontRight;
