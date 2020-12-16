@@ -126,11 +126,11 @@ public class RingDetectionTask extends RobotTask {
     {
         initVuforia(hardwareMap);
 
-        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
+        // if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             initTfod(hardwareMap);
-        } else {
-            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
-        }
+//        } else {
+//            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
+//        }
     }
 
     public void rateLimit(int ms)
@@ -160,7 +160,7 @@ public class RingDetectionTask extends RobotTask {
         robot.removeTask(this);
     }
 
-    public static RingKind isStone(Recognition object)
+    public static RingKind isRing(Recognition object)
     {
         if (object.getLabel().equals(LABEL_QUAD_RINGS)) {
             return RingKind.QUAD_KIND;
@@ -178,11 +178,11 @@ public class RingDetectionTask extends RobotTask {
         }
     }
     //only adds rings which will make event and add to que
-    protected void processStone(List<Recognition> objects)
+    protected void processQuadRing(List<Recognition> objects)
     {
         List<Recognition> rings = new ArrayList<>();
         for (Recognition object : objects) {
-            if (isStone(object) == RingKind.QUAD_KIND) {
+            if (isRing(object) == RingKind.QUAD_KIND) {
                 rings.add(object);
             }
         }
@@ -192,17 +192,17 @@ public class RingDetectionTask extends RobotTask {
         }
     }
 
-    protected void processSkyStone(List<Recognition> objects)
+    protected void processSingleRing(List<Recognition> objects)
     {
-        List<Recognition> skystones = new ArrayList<>();
+        List<Recognition> singlerings = new ArrayList<>();
         for (Recognition object : objects) {
-            if (isStone(object) == RingKind.SINGLE_KIND) {
-                skystones.add(object);
+            if (isRing(object) == RingKind.SINGLE_KIND) {
+                singlerings.add(object);
             }
         }
 
-        if (!skystones.isEmpty()) {
-            robot.queueEvent(new RingDetectionEvent(this, EventKind.OBJECTS_DETECTED, skystones));
+        if (!singlerings.isEmpty()) {
+            robot.queueEvent(new RingDetectionEvent(this, EventKind.OBJECTS_DETECTED, singlerings));
         }
 
     }
@@ -216,8 +216,9 @@ public class RingDetectionTask extends RobotTask {
         Recognition largest = null;
         List<Recognition> singleton;
 
+
         for (Recognition object : objects) {
-            if (isStone(object) == RingKind.SINGLE_KIND) {
+            if (isRing(object) == RingKind.SINGLE_KIND) {
                 if (largest == null) {
                     largest = object;
                 } else if ((largest.getHeight() * largest.getWidth()) < (object.getWidth() * object.getHeight())) {
@@ -245,10 +246,10 @@ public class RingDetectionTask extends RobotTask {
                 processEverything(objects);
                 break;
             case SINGLE_RING_DETECTED:
-                processSkyStone(objects);
+                processSingleRing(objects);
                 break;
             case QUAD_RING_DETECTED:
-                processStone(objects);
+                processQuadRing(objects);
                 break;
             case LARGEST_SKY_STONE_DETECTED:
                 processLargestSkyStone(objects);
