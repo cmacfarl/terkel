@@ -15,6 +15,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.firstinspires.ftc.robotcore.external.tfod.TfodSkyStone.TFOD_MODEL_ASSET;
 
 public class RingDetectionTask extends RobotTask {
 
@@ -62,11 +63,11 @@ public class RingDetectionTask extends RobotTask {
         LARGEST_SKY_STONE_DETECTED, //this may go away
         UNKNOWN_DETECTED,
     }
-     public enum RingKind {
-            SINGLE_KIND,
-            QUAD_KIND,
-            UNKNOWN_KIND,
-     };
+    public enum RingKind {
+        SINGLE_KIND,
+        QUAD_KIND,
+        UNKNOWN_KIND,
+    };
 
 
     //for phone camera constructor
@@ -126,7 +127,7 @@ public class RingDetectionTask extends RobotTask {
         initVuforia(hardwareMap);
 
         // if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-            initTfod(hardwareMap);
+        initTfod(hardwareMap);
 //        } else {
 //            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
 //        }
@@ -203,6 +204,34 @@ public class RingDetectionTask extends RobotTask {
         if (!singlerings.isEmpty()) {
             robot.queueEvent(new RingDetectionEvent(this, EventKind.OBJECTS_DETECTED, singlerings));
         }
+
+    }
+
+    protected void processLargestSkyStone(List<Recognition> objects)
+    {
+        if (objects.isEmpty()) {
+            return;
+        }
+
+        Recognition largest = null;
+        List<Recognition> singleton;
+
+
+        for (Recognition object : objects) {
+            if (isRing(object) == RingKind.SINGLE_KIND) {
+                if (largest == null) {
+                    largest = object;
+                } else if ((largest.getHeight() * largest.getWidth()) < (object.getWidth() * object.getHeight())) {
+                    largest = object;
+                }
+            }
+        }
+
+        if (largest != null) {
+            singleton = new ArrayList<>();
+            singleton.add(largest);
+            robot.queueEvent(new RingDetectionEvent(this, EventKind.OBJECTS_DETECTED, singleton));
+        }
     }
 
     //timeslice calls to get information from recognition
@@ -222,13 +251,17 @@ public class RingDetectionTask extends RobotTask {
             case QUAD_RING_DETECTED:
                 processQuadRing(objects);
                 break;
+            case LARGEST_SKY_STONE_DETECTED:
+                processLargestSkyStone(objects);
+                break;
         }
     }
 
     @Override
     public boolean timeslice()
+
     {
-     //timeslice set to 0 do when it gets called
+        //timeslice set to 0 do when it gets called
         if (rateLimitMs != 0) {
             if (timer.time() < rateLimitMs) {
                 return false;
@@ -240,6 +273,7 @@ public class RingDetectionTask extends RobotTask {
         if (rateLimitMs != 0) {
             timer.reset();
         }
+
         return false;
     }
 }
