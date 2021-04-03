@@ -84,7 +84,8 @@ public class TankMechanumControlSchemeFixLeft implements JoystickDriveControlSch
             rr = rightY;
         }
         //we are changing the left ones fl and rl by a putting a negative in front of it
-        return new MotorValues(-fl, fr, -rl, rr);
+        return new MotorValues(-fl, fr, rl, rr);
         //return new MotorValues(fl, fr, rl, rr); This was the original before trying the left fix
+        //made another change to rear left
     }
 }
