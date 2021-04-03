@@ -50,48 +50,40 @@ public class TankMechanumControlSchemeReverse implements JoystickDriveControlSch
         // Threshold for joystick values in the x may vary.
 
         if (leftX > 0.5 && rightX > 0.5) {          // both X-sticks sideways left
-            //fl = -leftX;
-            //rl = leftX;
-            //fr = -rightX;
-            //rr = rightX;
             fl = leftWheelBackward;
             rl = leftWheelForward;
             fr = rightWheelForward;
             rr = rightWheelBackward;
-        } else if (leftX < -0.5 && rightX < -0.5) { // both Y-sticks sideways right
-            //fl = -leftX;
-            //rl = leftX;
-            //fr = -rightX;
-            //rr = rightX;
+
+        } else if (leftX < -0.5 && rightX < -0.5) { // both X-sticks sideways right
             fl = leftWheelForward;
             rl = leftWheelBackward;
             fr = rightWheelBackward;
             rr = rightWheelForward;
-        } else if (gamepad.right_trigger > 0.5) {   // backward diagonal to the right
-            //fr = -1.0;
-            //rl = 1.0;
+
+        } else if (gamepad.right_trigger > 0.5) {   // rotate right
             fr = rightWheelBackward;
-            rl = leftWheelBackward;
-        } else if (gamepad.left_trigger > 0.5) {    // backward diagonal to the left
-            //fl = 1.0;
-            //rr = -1.0;
-            fl = leftWheelBackward;
             rr = rightWheelBackward;
+            fl = leftWheelForward;
+            rl = leftWheelForward;
+
+        } else if (gamepad.left_trigger > 0.5) {    // rotate left
+            fl = leftWheelBackward;
+            rl = rightWheelBackward;
+            rr = leftWheelForward;
+            fr = leftWheelBackward;
+
         } else if (gamepad.left_bumper) {           // forward diagonal to the left
-            //fr = 1.0;
-            //rl = -1.0;
             fr = rightWheelForward;
             rl = leftWheelForward;
+
         } else if (gamepad.right_bumper) {          // forward diagonal to the right
-            //fl = -1.0;
-            //rr = 1.0;
             fl = leftWheelForward;
             rr = rightWheelForward;
+
         } else {                                    // forward or backward
             fl = leftY;
             rl = leftY;
-            //fr = -rightY;
-            //rr = -rightY;
             fr = rightY;
             rr = rightY;
         }
