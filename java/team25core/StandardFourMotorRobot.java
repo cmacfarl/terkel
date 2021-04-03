@@ -24,7 +24,7 @@ public class StandardFourMotorRobot extends Robot {
      * should either not use this class, or more preferably, change your robot
      * configuration to match the _standard_ naming scheme for four motor robots.
      */
-    private final static String FRONT_LEFT = "frontLeft";
+    private final static String FRONT_LEFT = "frontLeft"; //47 maps to 27
     private final static String FRONT_RIGHT = "frontRight";
     private final static String BACK_LEFT = "backLeft";
     private final static String BACK_RIGHT = "backRight";
